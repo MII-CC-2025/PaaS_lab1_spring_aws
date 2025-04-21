@@ -1,28 +1,58 @@
 # PaaS con AWS Elastic Beanstalk
 
+Desarrollaremos una Aplicación con Spring
+
+
+## Requisitos
+
+Java 21:
+
+- Eliminar versiones instaladas (supongamos la 11):
+
+```sh
+$ sudo apt-get autoremove openjdk-11-jre-headless
+
+$ sudo apt-get autoremove openjdk-11-jdk-headless
+
+$ sudo apt-get purge openjdk-11-*
+```
+
+- Instalar versión 21:
+
+```sh
+$ sudo apt update -y
+$ sudo apt upgrade -y
+$ sudo apt install openjdk-21-jdk -y
+$ java --version
+openjdk 21.0.6 2025-01-21
+OpenJDK Runtime Environment (build 21.0.6+7-Ubuntu-122.04.1)
+OpenJDK 64-Bit Server VM (build 21.0.6+7-Ubuntu-122.04.1, mixed mode, sharing)
+$ sudo update-alternatives --config java
+```
+
 
 ## Crear Aplicación
 
 Vamos a crear una aplicación Spring Boot usando Spring Initializr
 
-- Utiliza Spring Initializr
+- Utiliza Spring Initializr: https://start.spring.io/
 
     - Project: Maven
-    - Language: Java, versión 17
-    - Spring Boot: 3.2.4
+    - Language: Java, versión 21
+    - Spring Boot: 3.4.4
     - Group: cc.paas.aws
-    - Artifac: holamundo
+    - Artifact: holamundo
     - Packaging: Jar
     - Dependencias: Spring Web y Thymeleaf
 
-- Genera el proyecto, guárdalo en local y súbelo y descomprime en tu IDE (AWS Cloud9)
+- Genera el proyecto, guárdalo en local y descomprime en tu IDE (si usas AWS Cloud9, tendrás que subirlo desde local)
 
 ## Crear un controlador y una vista
 
 Controlador: Fichero HomeController.java en el directorio src/main/java/cc/paas/aws/holamundo
 
 ```
-package cc.paas.aws.holamundo;
+package cc.paas.aws.holamundo.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -51,6 +81,7 @@ Vista: fichero index.html en src/main/resource/templates
     
     <body>
         <h1>Hola Mundo!!</h1>
+        <p>versión: 0.1</p>
 	
 	</body>
 </html>
@@ -74,7 +105,8 @@ Vista: fichero index.html en src/main/resource/templates
 
 Una vez iniciada, clic en Preview - Preview Running Application y aparecerá una ventana con la aplicación.
 
-Si haces clic en la URL, puedes copiarla y pegarla en el mismo navegador donde uses AWS Cloud9, desde otro navegador no será accesible, a menos que lo configures para ello.
+Si haces clic en la URL, puedes copiarla y pegarla en el mismo navegador donde uses AWS Cloud9, desde otro navegador no será accesible, 
+a menos que lo configures para ello.
 
 La URL será similar a la siguiente: https://d5fb5be6358943a8922adb524bb8819f.vfs.cloud9.us-east-1.amazonaws.com
 
@@ -106,7 +138,7 @@ El fichero .jar de la aplicación se localiza en el directorio target, descarga 
     - Nombre del entorno: (se autogenera, pero puedes cambiarlo, será el nombre la MV EC2 que se cree)
     - Dominio: (se autogenera, pero si quieres puedes cambiarlo, comprobando siempre la disponibilidad)
     - Plataforma: Java
-    - Versión (Ramificación de la plataforma): Corretto 17  Amazon Linux 203
+    - Versión (Ramificación de la plataforma): Corretto 21 Amazon Linux 203
     - Código de aplicación: selecciona "Cargar el código" y establece la "Etiqueta de versión" (por ejemplo, ver1.0)
     - Marca "Archivo local", haz clic en el botón "Elegir archivo" y selecciona el fichero .jar descargado en el apartado anterior.
     - En "Valores preestablecidos" (Elementos preestablecidos de configuración): Instancia única (compatible con la capa gratuita)
@@ -133,3 +165,10 @@ El fichero .jar de la aplicación se localiza en el directorio target, descarga 
 - Comprueba la app: http://holamundo-env.eba-jpzdcpsd.us-east-1.elasticbeanstalk.com/
 
     Si todo ha ido bien, podrás acceder a la aplicación en una URL similar a la anterior que verás en el campo dominio de la información general del entorno.
+    
+Recursos creados:
+
+- Máquina Virtual: se elimina con el entorno
+
+- Bucket S3: Con las versiones de la App, no se elimina. Para eliminarlo es necesario vaciarlo, borrar la política y eliminar el Bucket.
+
