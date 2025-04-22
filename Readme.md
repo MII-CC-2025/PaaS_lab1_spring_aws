@@ -172,3 +172,10 @@ Recursos creados:
 
 - Bucket S3: Con las versiones de la App, no se elimina. Para eliminarlo es necesario vaciarlo, borrar la política y eliminar el Bucket.
 
+
+## Elastic Beanstalk CLI 
+
+https://github.com/aws/aws-elastic-beanstalk-cli-setup
+
+pip install awsebcli --upgrade --user
+
